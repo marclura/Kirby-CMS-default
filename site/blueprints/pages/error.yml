@@ -1,0 +1,13 @@
+title: Error
+
+columns:
+  main:
+    sections:
+      fields:
+        type: fields
+        fields:
+          error_message:
+            label: Error message
+            type: textarea
+            size: huge
+

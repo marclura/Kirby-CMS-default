@@ -1,0 +1,30 @@
+// definition of the breakpoints (mobile first approach -> min-width)
+media_queries = {
+	mobile: "(max-width: 599px)",
+	tablet-v: "(min-width: 600px)",
+	tablet-h: "(min-width: 900px)",
+	desktop: "(min-width: 1200px)",
+	desktop-w: "(min-width: 2200px)"
+}
+
+//make the mixin function
+media(breakpoints)
+	conditions = ()
+	for breakpoint in breakpoints
+		push(conditions, media_queries[breakpoint])
+	conditions = join(", ", conditions)
+	@media conditions
+		{block}
+		
+//calculate the equivalent rem value from pixels
+torem(pixelval)
+	remval = pixelval / 16
+	remval = unit(remval, rem)
+	remval
+
+// calculate the percentage referring to the variable width_max_site
+toper(pixval)
+	//pixval = unit(pixval, px)
+	percentval = pixval / width_max_site * 100
+	percentval = unit(percentval, '%')
+	percentval

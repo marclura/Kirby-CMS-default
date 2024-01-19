@@ -1,0 +1,16 @@
+{
+    "devDependencies": {
+      "autoprefixer": ">=10.4.17",
+      "browser-sync": ">=3.0.2",
+      "cssnano": ">=6.0.3",
+      "gulp": "^4.0.2",
+      "gulp-connect-php": "1.0.3",
+      "gulp-postcss": ">=9.1.0",
+      "gulp-sourcemaps": ">=3.0.0",
+      "gulp-stylus": ">=3.0.1",
+      "path": ">=0.12.7"
+     },
+    "dependencies": {
+      "bin-version-check": "^5.1.0"
+    }
+  }
