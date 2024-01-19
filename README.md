@@ -1,4 +1,4 @@
-# LAUDS website
+# KIRBY CMS default setup
 
 The website is built with [Kirby CMS](https://getkirby.com/) and [Stylus](https://stylus-lang.com/) language for the css.
 
