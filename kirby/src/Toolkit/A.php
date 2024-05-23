@@ -255,7 +255,7 @@ class A
 	 * // result: ['cat' => 'miao', 'dog' => 'wuff'];
 	 * </code>
 	 *
-	 * @param array $array The source array
+	 * @param mixed $array The source array
 	 * @param string|int|array|null $key The key to look for
 	 * @param mixed $default Optional default value, which
 	 *                       should be returned if no element
@@ -349,6 +349,31 @@ class A
 		bool $strict = false
 	): bool {
 		return in_array($value, $array, $strict);
+	}
+
+	/**
+	 * Join array elements as a string,
+	 * also supporting nested arrays
+	 */
+	public static function implode(
+		array $array,
+		string $separator = ''
+	): string {
+		$result = '';
+
+		foreach ($array as $value) {
+			if (empty($result) === false) {
+				$result .= $separator;
+			}
+
+			if (is_array($value) === true) {
+				$value = static::implode($value, $separator);
+			}
+
+			$result .= $value;
+		}
+
+		return $result;
 	}
 
 	/**
@@ -563,7 +588,7 @@ class A
 	 */
 	public static function prepend(array $array, array $prepend): array
 	{
-		return $prepend + $array;
+		return static::merge($prepend, $array, A::MERGE_APPEND);
 	}
 
 	/**
@@ -914,9 +939,7 @@ class A
 	 *
 	 * // with callback
 	 * A::update($user, [
-	 *   'username' => function ($username) {
-	 *     return $username . ' j. simpson'
-	 *   }
+	 *   'username' => fn ($username) => $username . ' j. simpson'
 	 * ]);
 	 * </code>
 	 */

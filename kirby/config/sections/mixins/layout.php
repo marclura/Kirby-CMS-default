@@ -1,5 +1,7 @@
 <?php
 
+use Kirby\Cms\ModelWithContent;
+use Kirby\Form\Form;
 use Kirby\Toolkit\I18n;
 use Kirby\Toolkit\Str;
 
@@ -28,7 +30,7 @@ return [
 	],
 	'computed' => [
 		'columns' => function () {
-			$columns = [];
+			$columns   = [];
 
 			if ($this->layout !== 'table') {
 				return [];
@@ -76,9 +78,12 @@ return [
 				// keep the original column name as id
 				$column['id'] = $columnName;
 
-				// add the custom column to the array with a key that won't
-				// override the system columns
-				$columns[$columnName . 'Cell'] = $column;
+				// add the custom column to the array
+				// allowing to extend/overwrite existing columns
+				$columns[$columnName] = [
+					...$columns[$columnName] ?? [],
+					...$column
+				];
 			}
 
 			if ($this->type === 'pages') {
@@ -94,7 +99,27 @@ return [
 		},
 	],
 	'methods' => [
-		'columnsValues' => function (array $item, $model) {
+		'columnsWithTypes' => function () {
+			$columns = $this->columns;
+
+			// add the type to the columns for the table layout
+			if ($this->layout === 'table') {
+				$blueprint = $this->models->first()?->blueprint();
+
+				if ($blueprint === null) {
+					return $columns;
+				}
+
+				foreach ($columns as $columnName => $column) {
+					if ($id = $column['id'] ?? null) {
+						$columns[$columnName]['type'] ??= $blueprint->field($id)['type'] ?? null;
+					}
+				}
+			}
+
+			return $columns;
+		},
+		'columnsValues' => function (array $item, ModelWithContent $model) {
 			$item['title'] = [
 				// override toSafeString() coming from `$item`
 				// because the table cells don't use v-html
@@ -108,19 +133,20 @@ return [
 				$item['info'] = $model->toString($this->info);
 			}
 
+			// Use form to get the proper values for the columns
+			$form = Form::for($model)->values();
+
 			foreach ($this->columns as $columnName => $column) {
-				// don't overwrite essential columns
-				if (isset($item[$columnName]) === true) {
-					continue;
-				}
-
-				if (empty($column['value']) === false) {
-					$value = $model->toString($column['value']);
-				} else {
-					$value = $model->content()->get($column['id'] ?? $columnName)->value();
-				}
-
-				$item[$columnName] = $value;
+				$item[$columnName] = match (empty($column['value'])) {
+					// if column value defined, resolve the query
+					false   => $model->toString($column['value']),
+					// otherwise use the form value,
+					// but don't overwrite columns
+					default =>
+						$item[$columnName] ??
+						$form[$column['id'] ?? $columnName] ??
+						null,
+				};
 			}
 
 			return $item;

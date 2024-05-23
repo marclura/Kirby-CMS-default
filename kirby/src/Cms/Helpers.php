@@ -110,6 +110,9 @@ class Helpers
 	) {
 		$override = null;
 
+		/**
+		 * @psalm-suppress UndefinedVariable
+		 */
 		$handler = set_error_handler(function () use (&$override, &$handler, $condition, $fallback) {
 			// check if suppress condition is met
 			$suppress = $condition(...func_get_args());
@@ -135,9 +138,14 @@ class Helpers
 			return true;
 		});
 
-		$result = $action();
-
-		restore_error_handler();
+		try {
+			$result = $action();
+		} finally {
+			// always restore the error handler, even if the
+			// action or the standard error handler threw an
+			// exception; this avoids modifying global state
+			restore_error_handler();
+		}
 
 		return $override ?? $result;
 	}

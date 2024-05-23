@@ -71,7 +71,7 @@
 
 	"error": "Ошибка",
 	"error.access.code": "Неверный код",
-	"error.access.login": "Неправильный логин",
+	"error.access.login": "Неверный логин или пароль",
 	"error.access.panel": "У вас нет права доступа к панели",
 	"error.access.view": "У вас нет прав доступа к этой части панели",
 
@@ -135,7 +135,7 @@
 
 	"error.license.domain": "Лицензия на этот домен отсутствует",
 	"error.license.email": "Пожалуйста, введите правильный Email",
-	"error.license.format": "Please enter a valid license code",
+	"error.license.format": "Пожалуйста, введите правильный лицензионный код",
 	"error.license.verification": "Лицензия не подтверждена",
 
 	"error.login.totp.confirm.invalid": "Неверный код",
@@ -317,9 +317,16 @@
 	"field.blocks.quote.citation.placeholder": "Автор …",
 	"field.blocks.text.name": "Текст",
 	"field.blocks.text.placeholder": "Текст …",
+	"field.blocks.video.autoplay": "Автовоспроизведение",
 	"field.blocks.video.caption": "Подпись",
+	"field.blocks.video.controls": "Элементы управления",
+	"field.blocks.video.location": "Расположение",
+	"field.blocks.video.loop": "Зациклить",
+	"field.blocks.video.muted": "Без звука",
 	"field.blocks.video.name": "Видео",
 	"field.blocks.video.placeholder": "Введите ссылку на видео",
+	"field.blocks.video.poster": "Обложка",
+	"field.blocks.video.preload": "Предзагрузка",
 	"field.blocks.video.url.label": "Ссылка на видео",
 	"field.blocks.video.url.placeholder": "https://youtube.com/?v=",
 
@@ -417,7 +424,7 @@
 	"license.activate": "Активировать сейчас",
 	"license.activate.label": "Пожалуйста, активируйте Вашу лицензию",
 	"license.activate.domain": "Ваша лицензия будет активирована на {host}.",
-	"license.activate.local": "Вы собираетесьактивировать лицензию на локальный домен {host}. Если этот сайт будет размещен на общедоступном домене, то, пожалуйста, укажите его вместо {host}.",
+	"license.activate.local": "Вы собираетесь активировать лицензию на локальный домен {host}. Если этот сайт будет размещен на общедоступном домене, то, пожалуйста, укажите его вместо {host}.",
 	"license.activated": "Активировано",
 	"license.buy": "Купить лицензию",
 	"license.code": "Код",
@@ -425,8 +432,8 @@
 	"license.code.label": "Пожалуйста вставьте код лицензии",
 	"license.status.active.info": "Включает обновления до {date}",
 	"license.status.active.label": "Действительная лицензия",
-	"license.status.demo.info": "This is a demo installation",
-	"license.status.demo.label": "Demo",
+	"license.status.demo.info": "Это демонстрационная установка",
+	"license.status.demo.label": "Демо",
 	"license.status.inactive.info": "Обновите лицензию для перехода на новые версии",
 	"license.status.inactive.label": "Нет новых обновлений",
 	"license.status.legacy.bubble": "Вы готовы обновить вашу лицензию?",
@@ -447,7 +454,7 @@
 
 	"lock.unsaved": "Несохраненные изменения",
 	"lock.unsaved.empty": "Несохраненных изменений нет",
-	"lock.isLocked": "Несохраненные изменения <strong>{email}</strong>",
+	"lock.isLocked": "Несохраненные изменения {email}",
 	"lock.unlock": "Разблокировать",
 	"lock.unlock.submit": "Разблокируйте и перезапишите несохраненные изменения <strong>{email}</strong>",
 	"lock.isUnlocked": "Были перезаписаны другим пользователем",
