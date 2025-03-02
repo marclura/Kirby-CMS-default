@@ -112,7 +112,7 @@ abstract class Sql
 	public function columnName(string $table, string $column, bool $enforceQualified = false): string|null
 	{
 		// ensure we have clean $table and $column values without qualified identifiers
-		list($table, $column) = $this->splitIdentifier($table, $column);
+		[$table, $column] = $this->splitIdentifier($table, $column);
 
 		// combine the identifiers again
 		if ($this->database->validateColumn($table, $column) === true) {
@@ -146,7 +146,7 @@ abstract class Sql
 	 * Combines an identifier (table and column)
 	 *
 	 * @param $values bool Whether the identifier is going to be used for a VALUES clause;
-	 *                only relevant for SQLite
+	 *               only relevant for SQLite
 	 */
 	public function combineIdentifier(string $table, string $column, bool $values = false): string
 	{
@@ -624,7 +624,7 @@ abstract class Sql
 			$result = [];
 
 			foreach ($columns as $column) {
-				list($table, $columnPart) = $this->splitIdentifier($table, $column);
+				[$table, $columnPart] = $this->splitIdentifier($table, $column);
 
 				if ($this->validateColumn($table, $columnPart) === true) {
 					$result[] = $this->combineIdentifier($table, $columnPart);

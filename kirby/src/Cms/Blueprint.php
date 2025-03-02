@@ -39,7 +39,7 @@ class Blueprint
 	/**
 	 * Magic getter/caller for any blueprint prop
 	 */
-	public function __call(string $key, array $arguments = null): mixed
+	public function __call(string $key, array|null $arguments = null): mixed
 	{
 		return $this->props[$key] ?? null;
 	}
@@ -65,7 +65,7 @@ class Blueprint
 		unset($props['model']);
 
 		// extend the blueprint in general
-		$props = $this->extend($props);
+		$props = static::extend($props);
 
 		// apply any blueprint preset
 		$props = $this->preset($props);
@@ -102,7 +102,7 @@ class Blueprint
 	 * Gathers what file templates are allowed in
 	 * this model based on the blueprint
 	 */
-	public function acceptedFileTemplates(string $inSection = null): array
+	public function acceptedFileTemplates(string|null $inSection = null): array
 	{
 		// get cached results for the current file model
 		// (except when collecting for a specific section)
@@ -320,7 +320,7 @@ class Blueprint
 	 */
 	public static function factory(
 		string $name,
-		string $fallback = null,
+		string|null $fallback,
 		ModelWithContent $model
 	): static|null {
 		try {
@@ -652,7 +652,7 @@ class Blueprint
 		}
 
 		// extend options if possible
-		$options = $this->extend($options);
+		$options = static::extend($options);
 
 		foreach ($options as $key => $value) {
 			$alias = $aliases[$key] ?? null;
@@ -686,7 +686,7 @@ class Blueprint
 			}
 
 			// inject all section extensions
-			$sectionProps = $this->extend($sectionProps);
+			$sectionProps = static::extend($sectionProps);
 
 			$sections[$sectionName] = $sectionProps = [
 				...$sectionProps,
@@ -699,14 +699,14 @@ class Blueprint
 					'name'  => $sectionName,
 					'label' => 'Invalid section type for section "' . $sectionName . '"',
 					'type'  => 'info',
-					'text'  => 'The following section types are available: ' . $this->helpList(array_keys(Section::$types))
+					'text'  => 'The following section types are available: ' . static::helpList(array_keys(Section::$types))
 				];
 			} elseif (isset(Section::$types[$type]) === false) {
 				$sections[$sectionName] = [
 					'name'  => $sectionName,
 					'label' => 'Invalid section type ("' . $type . '")',
 					'type'  => 'info',
-					'text'  => 'The following section types are available: ' . $this->helpList(array_keys(Section::$types))
+					'text'  => 'The following section types are available: ' . static::helpList(array_keys(Section::$types))
 				];
 			}
 
@@ -764,7 +764,7 @@ class Blueprint
 			}
 
 			// inject all tab extensions
-			$tabProps = $this->extend($tabProps);
+			$tabProps = static::extend($tabProps);
 
 			// inject a preset if available
 			$tabProps = $this->preset($tabProps);

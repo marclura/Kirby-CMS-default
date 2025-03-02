@@ -112,6 +112,11 @@ return [
 			'width'
 		],
 		'html' => function (KirbyTag $tag): string {
+			$kirby = $tag->kirby();
+
+			$tag->width  ??= $kirby->option('kirbytext.image.width');
+			$tag->height ??= $kirby->option('kirbytext.image.height');
+
 			if ($tag->file = $tag->file($tag->value)) {
 				$tag->src       = $tag->file->url();
 				$tag->alt     ??= $tag->file->alt()->or('')->value();
@@ -128,6 +133,13 @@ return [
 					};
 
 					$tag->srcset = $tag->file->srcset($srcset);
+				}
+
+				if ($tag->width === 'auto') {
+					$tag->width = $tag->file->width();
+				}
+				if ($tag->height === 'auto') {
+					$tag->height = $tag->file->height();
 				}
 			} else {
 				$tag->src = Url::to($tag->value);
@@ -157,14 +169,14 @@ return [
 				'alt'    => $tag->alt ?? ''
 			]);
 
-			if ($tag->kirby()->option('kirbytext.image.figure', true) === false) {
+			if ($kirby->option('kirbytext.image.figure', true) === false) {
 				return $link($image);
 			}
 
 			// render KirbyText in caption
 			if ($tag->caption) {
 				$options = ['markdown' => ['inline' => true]];
-				$caption = $tag->kirby()->kirbytext($tag->caption, $options);
+				$caption = $kirby->kirbytext($tag->caption, $options);
 				$tag->caption = [$caption];
 			}
 
@@ -252,6 +264,7 @@ return [
 			'caption',
 			'controls',
 			'class',
+			'disablepictureinpicture',
 			'height',
 			'loop',
 			'muted',
@@ -294,12 +307,15 @@ return [
 
 			// don't use attributes that iframe doesn't support
 			if ($isProviderVideo === false) {
-				// converts tag attributes to supported formats (listed below) to output correct html
-				// booleans: autoplay, controls, loop, muted
-				// strings : poster, preload
-				// for ex  : `autoplay` will not work if `false` is a `string` instead of a `boolean`
+				// convert tag attributes to supported formats (bool, string)
+				// to output correct html attributes
+				//
+				// for ex:
+				// `autoplay` will not work if `false` is a string
+				// instead of a boolean
 				$attrs['autoplay']    = $autoplay = Str::toType($tag->autoplay, 'bool');
 				$attrs['controls']    = Str::toType($tag->controls ?? true, 'bool');
+				$attrs['disablepictureinpicture'] = Str::toType($tag->disablepictureinpicture ?? false, 'bool');
 				$attrs['loop']        = Str::toType($tag->loop, 'bool');
 				$attrs['muted']       = Str::toType($tag->muted ?? $autoplay, 'bool');
 				$attrs['playsinline'] = Str::toType($tag->playsinline ?? $autoplay, 'bool');
